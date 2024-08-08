@@ -1,12 +1,24 @@
 # start zookeepper( binding to port 0.0.0.0/0.0.0.0:2181 )
 sudo ./kafka_/bin/zookeeper-server-start.sh ./kafka_/config/zookeeper.properties
-
 # start kafka broker 0
 sudo ./kafka_/bin/kafka-server-start.sh ./kafka_/config/server.properties
 # start kafka broker 1
 sudo ./kafka_/bin/kafka-server-start.sh ./kafka_/config/server-1.properties
 # start kafka broker 2
 sudo ./kafka_/bin/kafka-server-start.sh ./kafka_/config/server-2.properties
+
+#------------------Kafka with Kraft--------------------------------
+
+#Generate a Cluster UUID
+KAFKA_CLUSTER_ID="$(./kafka_/bin/kafka-storage.sh random-uuid)"
+
+#Format Log Directories
+./kafka_/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c ./kafka_/config/kraft/server.properties
+
+#Start the Kafka Server
+./kafka_/bin/kafka-server-start.sh ./kafka_/config/kraft/server.properties
+#----------------------------------------------------------------------
+
 
 # create topic (3 broker, 1 partition, bootstraper server location)
 
@@ -30,6 +42,24 @@ sudo ./kafka_/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --
 
 # Consumer
 sudo ./kafka_/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mytp --from-beginning
+
+
+#Add connect file jar to path
+echo "plugin.path=./kafka_/libs/connect-file-3.4.0.jar" >> ./kafka_/config/connect-standalone.properties
+#start by creating some seed data to test with:
+echo -e "foo\nbar" > test.txt
+#start two connectors running in standalone mode
+./kafka_/bin/connect-standalone.sh ./kafka_/config/connect-standalone.properties ./kafka_/config/connect-file-source.properties ./kafka_/config/connect-file-sink.properties
+##the data is being stored in the Kafka topic connect-test, so we can also run a console consumer to see the data in the topic
+./kafka_/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic connect-test --from-beginning
+
+#TERMINATE THE KAFKA ENVIRONMENT
+- Stop producer, consumer
+- Stop brokers
+- Stop zookeeper
+- Remove topics and configurations
+rm -rf /tmp/kafka-logs /tmp/zookeeper /tmp/kraft-combined-logs
+
 
 # Kurbenetes Stateful sets
 # Ordered, graceful deployment, scaling and automated rolling updates

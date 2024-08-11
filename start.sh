@@ -1,3 +1,14 @@
+wget https://downloads.apache.org/kafka/3.3.1/kafka_2.12-3.3.1.tgz
+tar -xvf kafka_2.12-3.3.1.tgz
+
+
+-----------------------
+java -version
+sudo yum install java-1.8.0-openjdk
+java -version
+cd kafka_2.12-3.3.1
+
+
 # start zookeepper( binding to port 0.0.0.0/0.0.0.0:2181 )
 sudo ./kafka_/bin/zookeeper-server-start.sh ./kafka_/config/zookeeper.properties
 # start kafka broker 0
@@ -8,6 +19,8 @@ sudo ./kafka_/bin/kafka-server-start.sh ./kafka_/config/server-1.properties
 sudo ./kafka_/bin/kafka-server-start.sh ./kafka_/config/server-2.properties
 
 #------------------Kafka with Kraft--------------------------------
+export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+cd kafka_2.12-3.3.1
 
 #Generate a Cluster UUID
 KAFKA_CLUSTER_ID="$(./kafka_/bin/kafka-storage.sh random-uuid)"

@@ -8,3 +8,7 @@ helm upgrade --install akhq akhq/akhq
 # Chart version >=0.1.1 requires Kubernetes version >=1.14
 # Chart version 0.1.0 works on previous Kubernetes versions
 helm install akhq akhq/akhq --version 0.1.0
+
+
+-------
+

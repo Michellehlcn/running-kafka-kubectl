@@ -1,6 +1,6 @@
-if [ -d /root/.kube ]
+if [ -d /Users/michelle/.kube ]
 then
 echo "/root.kube directory exists"
 else
-mkdir /root/.kube && touch /root/.kube/config
+mkdir /Users/michelle/.kube && touch /Users/michelle/.kube/config
 fi

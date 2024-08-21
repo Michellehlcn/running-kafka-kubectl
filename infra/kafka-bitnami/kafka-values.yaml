@@ -13,7 +13,7 @@ externalAccess:
   autoDiscovery:
     enabled: true
 kraft:
-  enabled: false
+  enabled: true
   replicas: 3
   zookeeper: 
     enabled: false

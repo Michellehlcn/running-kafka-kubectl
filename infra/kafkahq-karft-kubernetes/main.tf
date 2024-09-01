@@ -48,4 +48,4 @@ resource "helm_release" "kafka" {
 #     ]
 # }
 
-//
+//kubectl port-forward svc/akhq 8080:8080

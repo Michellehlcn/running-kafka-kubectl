@@ -1,0 +1,22 @@
+name: Terraform
+on:
+  push:
+    paths:
+      - 'environments/development/**'
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: Terraform Init
+        run: terraform init
+        working-directory: environments/development
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: environments/development
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: environments/development
